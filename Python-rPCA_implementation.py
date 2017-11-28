@@ -20,13 +20,13 @@ import pickle
 
 
 # Data_Path
-data_path = '../data/'
+data_path = '/scratch/js5991/opt/valid'
 data = header.Data(data_path)
 #valid_data = header.Data(valid_data_path)
 #test_data = header.Data(test_data_path)
-batch_size =  2
-#total_batch =1
-total_batch = len(data.wavfiles)/batch_size
+batch_size =  len(data.wavfiles)
+total_batch =1
+#total_batch = len(data.wavfiles)/batch_size
 gain =1.5
 
 NSDR_dict = dict()
@@ -59,7 +59,7 @@ for j in range(total_batch):
 
 GNSDR_all = sum_NSDR /sum_duration
 print("Overall GNSDR: {}".format(GNSDR_all))
-pickle.dump(NSDR_dict, open('NSDR_dictionary', 'wb'))
+pickle.dump(NSDR_dict, open('/Scratch/js5991/opt/valid_NSDR_dictionary', 'wb'))
 
 
 
