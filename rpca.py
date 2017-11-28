@@ -106,15 +106,15 @@ def pcp_alm(X, maxiter=500, tol=1e-7):
     one_norm = np.sum(np.abs(X))
     inf_norm = np.max(np.abs(X))
 
-    print("frob_norm", frob_norm)
-    print("two_norm", two_norm)
-    print("one_norm", one_norm)
-    print("info_norm", inf_norm)
+    #print("frob_norm", frob_norm)
+    #print("two_norm", two_norm)
+    #print("one_norm", one_norm)
+    #print("info_norm", inf_norm)
 
     mu_inv = 4 * one_norm / np.prod(n)
 
     gamma = 1 / np.sqrt(np.max([X.shape[0], X.shape[1]]))
-    print("gamma", gamma)
+    #print("gamma", gamma)
     # Kicking
     k = np.min([
         np.floor(mu_inv / two_norm),
