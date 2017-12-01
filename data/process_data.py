@@ -5,8 +5,7 @@ import os
 import random
 
 
-
-def load_data(path, filename, sampling_rate=16000):
+def load_audio(path, filename, sampling_rate=16000):
     '''
     Function to load the '.wav' data
     @param path: str, where data is read from
@@ -21,15 +20,23 @@ def load_data(path, filename, sampling_rate=16000):
     return song_mix, music, voice, len(song_mix)
 
 
-def save_data(path, filename, data, sampling_rate=16000):
+def save_audio(path, filename, data, sampling_rate=16000):
+    '''
+    Function to save the output in '.wav' format
+    @param path: str, directory of where the data is saved
+    @param filename: str, file name, should end in '.wav'
+    @param sampling rate: int, default is 16000
+    '''
     wavfile.write(path + filename, rate=sampling_rate, data=data)
 
 def pad(audio, pad_length):
-    #padded_list = audio + np.zeros(pad_length - len(audio))
-    padded_list= np.pad(audio, pad_width=pad_length - len(audio), mode='constant', constant_values=0)
-    #padding = [0] * (pad_length - len(audio))
-    #padded_list = audio + padding
-    return padded_list
+    '''
+    Function to zero-pad audios to the right
+    @param audio: 1-d numpy array, audio sample
+    @param pad_length: int, desired length of audio. Number of zeros = pad_length - length of audio
+    '''
+    padded_audio= np.pad(audio, pad_width=pad_length - len(audio), mode='constant', constant_values=0)
+    return padded_audio
 
 class Data:
     def __init__(self, path):
@@ -38,7 +45,6 @@ class Data:
         for (root, dirs, files) in os.walk(self.path):
             self.wavfiles.extend(['{}/{}'.format(root, f) for f in files if f.endswith(".wav")])
             
-
     def batch_iter(self, batch_size, sampling_rate=16000):
         start = -1 * batch_size
         dataset_size = len(self.wavfiles)
@@ -59,7 +65,7 @@ class Data:
             batch_indices = order[start:start + batch_size]
             batch_file = [self.wavfiles[index].replace(self.path, "") for index in batch_indices]
             for file_name in batch_file:
-                mix, music, voice, length = load_data(self.path, file_name, sampling_rate= sampling_rate)
+                mix, music, voice, length = load_audio(self.path, file_name, sampling_rate= sampling_rate)
                 mix_batch.append(mix)
                 music_batch.append(music)
                 voice_batch.append(voice)

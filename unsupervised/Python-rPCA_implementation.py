@@ -1,8 +1,6 @@
 
 # coding: utf-8
 
-
-
 import bisect
 import librosa
 import numpy as np
@@ -10,23 +8,24 @@ from numpy.linalg import norm
 from numpy.linalg import svd 
 from scipy.sparse.linalg import svds
 import scipy.io.wavfile as wavfile
-import rpca
 from models import *
-from evaluation import eval_result
-import header
-from separation import bss_eval_sources
+from evaluation.eval import eval_result
+import process_data
+from evaluation.bss_eval import bss_eval_sources
 import time
 import pickle
 
 
 # Data_Path
-data_path = '/scratch/js5991/opt/valid'
-data = header.Data(data_path)
+data_path = '/scratch/lg2755/opt/valid'
+#data_path = '/scratch/js5991/opt/valid'
+data = process_data.Data(data_path)
 #valid_data = header.Data(valid_data_path)
 #test_data = header.Data(test_data_path)
-batch_size =  len(data.wavfiles)
-total_batch =1
-#total_batch = len(data.wavfiles)/batch_size
+batch_size = 20
+total_batch = len(data.wavfiles)/batch_size
+
+# TODO: multiple gain
 gain =1.5
 
 NSDR_dict = dict()

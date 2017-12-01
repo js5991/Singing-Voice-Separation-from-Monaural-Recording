@@ -1,4 +1,4 @@
-import rpca
+import model.rpca as rpca
 import numpy as np
 
 n = 100
