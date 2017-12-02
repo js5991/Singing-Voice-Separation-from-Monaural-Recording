@@ -8,7 +8,7 @@
 #SBATCH --mem=8GB
 #SBATCH --job-name=opt_rpca
 #SBATCH --mail-type=END
-##SBATCH --mail-user=js5991@nyu.edu
+##SBATCH --mail-user=lg2755@nyu.edu
 #SBATCH --output=slurm_%j.out
 
 module purge
