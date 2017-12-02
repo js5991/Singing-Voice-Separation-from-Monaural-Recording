@@ -35,7 +35,9 @@ def pad(audio, pad_length):
     @param audio: 1-d numpy array, audio sample
     @param pad_length: int, desired length of audio. Number of zeros = pad_length - length of audio
     '''
-    padded_audio= np.pad(audio, pad_width=pad_length - len(audio), mode='constant', constant_values=0)
+    padded_audio = np.zeros(pad_length)
+    
+    padded_audio[:len(audio)] = audio
     return padded_audio
 
 class Data:
