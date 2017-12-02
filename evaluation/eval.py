@@ -1,4 +1,4 @@
-from evalution.bss_eval import *
+from bss_eval import *
 
 def eval_result(s, s_estimate, m):
     sdr_voice, sir_voice, sar_voice, perm_voice = bss_eval_sources(s, s_estimate)

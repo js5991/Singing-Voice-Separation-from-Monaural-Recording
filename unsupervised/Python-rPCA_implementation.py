@@ -1,23 +1,31 @@
 
 # coding: utf-8
-
 import bisect
 import librosa
+import sys
 import numpy as np
 from numpy.linalg import norm
-from numpy.linalg import svd 
+from numpy.linalg import svd
 from scipy.sparse.linalg import svds
 import scipy.io.wavfile as wavfile
-from models import *
-from evaluation.eval import eval_result
-import process_data
-from evaluation.bss_eval import bss_eval_sources
 import time
 import pickle
 
+sys.path.append('../evaluation')
+sys.path.append('../data')
+sys.path.append('../')
+
+from eval import eval_result
+import process_data
+from models import *
+from bss_eval import bss_eval_sources
+
+
 
 # Data_Path
-data_path = '/scratch/lg2755/valid_1'
+
+data_path = '../../data/MIR-1K_for_MIREX/Wavfile/'
+#data_path = '/scratch/lg2755/valid_1'
 #data_path = '/scratch/js5991/opt/valid'
 data = process_data.Data(data_path)
 #valid_data = header.Data(valid_data_path)
