@@ -17,13 +17,14 @@ import pickle
 
 
 # Data_Path
-data_path = '/scratch/lg2755/valid'
+data_path = '/scratch/lg2755/valid_1'
 #data_path = '/scratch/js5991/opt/valid'
 data = process_data.Data(data_path)
 #valid_data = header.Data(valid_data_path)
 #test_data = header.Data(test_data_path)
-batch_size = 20
-total_batch = len(data.wavfiles)/batch_size
+batch_size = 1
+total_batch = 1
+#total_batch = len(data.wavfiles)/batch_size
 
 # TODO: multiple gain
 gain =1.5
@@ -56,9 +57,10 @@ for j in range(total_batch):
     average_time = (end - start)/sum(duration_batch)
     print("average time taken in per clip: {}".format(average_time))
 
-GNSDR_all = sum_NSDR /sum_duration
-print("Overall GNSDR: {}".format(GNSDR_all))
-pickle.dump(NSDR_dict, open('/Scratch/js5991/opt/valid_NSDR_dictionary', 'wb'))
+
+#GNSDR_all = sum_NSDR /sum_duration
+#print("Overall GNSDR: {}".format(GNSDR_all))
+pickle.dump(NSDR_dict, open('/Scratch/lg2755/valid_res/NSDR_dict_1.p', 'wb'))
 
 
 
