@@ -47,7 +47,7 @@ class Data:
         for (root, dirs, files) in os.walk(self.path):
             self.wavfiles.extend(['{}/{}'.format(root, f) for f in files if f.endswith(".wav")])
             
-    def batch_iter(self, batch_size, sampling_rate=16000):
+    def batch_iter(self, batch_size, sampling_rate=16000, need_padding=False):
         start = -1 * batch_size
         dataset_size = len(self.wavfiles)
         order = list(range(dataset_size))
@@ -72,12 +72,13 @@ class Data:
                 music_batch.append(music)
                 voice_batch.append(voice)
                 length_batch.append(length)
+            
+            if need_padding:
+                max_length = max(length_batch)
+                for i in range(batch_size):
                 
-            max_length = max(length_batch)
-            for i in range(batch_size):
-                
-                mix_batch[i] = pad(mix_batch[i], max_length)
-                music_batch[i] = pad(music_batch[i], max_length)
-                voice_batch[i] = pad(voice_batch[i], max_length)
+                    mix_batch[i] = pad(mix_batch[i], max_length)
+                    music_batch[i] = pad(music_batch[i], max_length)
+                    voice_batch[i] = pad(voice_batch[i], max_length)
                 
             yield [mix_batch, music_batch, voice_batch, length_batch, batch_file]
