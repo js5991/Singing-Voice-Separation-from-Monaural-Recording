@@ -32,6 +32,7 @@ data = process_data.Data(data_path)
 #test_data = header.Data(test_data_path)
 batch_size = 1
 total_batch = 1
+
 #total_batch = len(data.wavfiles)/batch_size
 
 # TODO: multiple gain
@@ -68,7 +69,7 @@ for j in range(total_batch):
 
 #GNSDR_all = sum_NSDR /sum_duration
 #print("Overall GNSDR: {}".format(GNSDR_all))
-pickle.dump(NSDR_dict, open('/Scratch/lg2755/valid_res/NSDR_dict_1.p', 'wb'))
+pickle.dump(NSDR_dict, open('/scratch/lg2755/valid_res/NSDR_dict_1.p', 'wb'))
 
 
 
