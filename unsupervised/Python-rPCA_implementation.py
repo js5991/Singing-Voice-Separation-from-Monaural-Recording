@@ -25,18 +25,17 @@ from bss_eval import bss_eval_sources
 # Data_Path
 
 #data_path = '../../data/MIR-1K_for_MIREX/Wavfile/'
-data_path = '/scratch/lg2755/valid_1'
+data_path = '/scratch/lg2755/valid_4'
 #data_path = '/scratch/js5991/opt/valid'
 data = process_data.Data(data_path)
 #valid_data = header.Data(valid_data_path)
 #test_data = header.Data(test_data_path)
-batch_size = 1
-total_batch = 1
-
-#total_batch = len(data.wavfiles)/batch_size
+batch_size = 10
+#total_batch = 1
+total_batch = len(data.wavfiles)/batch_size
 
 # TODO: multiple gain
-gain =1.5
+gain =3.0
 
 NSDR_dict = dict()
 sum_NSDR = 0
@@ -69,7 +68,7 @@ for j in range(total_batch):
 
 #GNSDR_all = sum_NSDR /sum_duration
 #print("Overall GNSDR: {}".format(GNSDR_all))
-pickle.dump(NSDR_dict, open('/scratch/lg2755/valid_res/NSDR_dict_1.p', 'wb'))
+pickle.dump(NSDR_dict, open('/scratch/lg2755/valid_res/NSDR_dict_4_gain3.p', 'wb'))
 
 
 
