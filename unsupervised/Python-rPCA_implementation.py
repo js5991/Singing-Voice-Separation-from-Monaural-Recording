@@ -79,11 +79,8 @@ for j in range(total_batch):
 
 #GNSDR_all = sum_NSDR /sum_duration
 #print("Overall GNSDR: {}".format(GNSDR_all))
-<<<<<<< HEAD
-pickle.dump(NSDR_dict, open('/scratch/lg2755/valid_res/NSDR_dict_4_gain3.p', 'wb'))
-=======
+#pickle.dump(NSDR_dict, open('/scratch/lg2755/valid_res/NSDR_dict_4_gain3.p', 'wb'))
 pickle.dump(NSDR_dict, open('/scratch/lg2755/valid_res/NSDR_dict_gain10.p', 'wb'))
->>>>>>> 65b7f0656649a15d8abea3699bf79f121bfe4885
 
 
 
