@@ -25,7 +25,7 @@ from bss_eval import bss_eval_sources
 # Data_Path
 
 #data_path = '../../data/MIR-1K_for_MIREX/Wavfile/'
-data_path = '/scratch/lg2755/valid_4'
+data_path = '/scratch/lg2755/valid'
 #data_path = '/scratch/js5991/opt/valid'
 data = process_data.Data(data_path)
 #valid_data = header.Data(valid_data_path)
