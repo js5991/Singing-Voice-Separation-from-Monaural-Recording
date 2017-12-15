@@ -49,7 +49,7 @@ for j in range(total_batch):
 
     start = time.time()
     #gamma_spec = 0.01, 0.05, 0.1, 0.5
-    gamma_spec = 0.01
+    gamma_spec = True
     #batch_NSDR = 0
     for i in range(batch_size):
         M_stft, L_output, S_output = separate_signal_with_RPCA(mix_batch[i], gamma_spec=gamma_spec)
