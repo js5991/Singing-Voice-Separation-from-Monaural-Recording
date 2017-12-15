@@ -26,6 +26,7 @@ from bss_eval import bss_eval_sources
 #data_path = '../../data/MIR-1K_for_MIREX/Wavfile/'
 #data_path = '/scratch/lg2755/valid'
 data_path = '/scratch/js5991/opt/valid'
+data_path_noise = '/scratch/js5991/opt/valid'
 
 #valid_data = header.Data(valid_data_path)
 #test_data = header.Data(test_data_path)
@@ -44,7 +45,7 @@ use_new_time_freq = True
 noise_data_set = True  # False for music data set
 
 if noise_data_set:
-    data = process_data.Data_noise(data_path)
+    data = process_data.Data_noise(data_path，data_path_noise)
 else:
     data = process_data.Data(data_path)
 for j in range(total_batch):
