@@ -21,7 +21,6 @@ from models import *
 from bss_eval import bss_eval_sources
 
 
-
 # Data_Path
 
 #data_path = '../../data/MIR-1K_for_MIREX/Wavfile/'
@@ -32,10 +31,10 @@ data = process_data.Data(data_path)
 #test_data = header.Data(test_data_path)
 batch_size = 10
 #total_batch = 1
-total_batch = len(data.wavfiles)/batch_size
+total_batch = len(data.wavfiles) / batch_size
 
 # TODO: multiple gain
-gain =2.5
+gain = 2.5
 
 NSDR_dict = dict()
 sum_NSDR = 0
@@ -52,15 +51,15 @@ for j in range(total_batch):
     #batch_NSDR = 0
     for i in range(batch_size):
         M_stft, L_output, S_output = separate_signal_with_RPCA(mix_batch[i], gamma_spec=gamma_spec)
-        X_sing, X_music = time_freq_masking(M_stft, L_output, S_output, gain)
-        X_sing_istft = librosa.istft(X_sing, hop_length=256)
-        X_music_istft = librosa.istft(X_music, hop_length=256)
+        #X_sing, X_music = time_freq_masking(M_stft, L_output, S_output, gain)
+        X_sing_istft = librosa.istft(S_output, hop_length=256)
+        X_music_istft = librosa.istft(L_output, hop_length=256)
         #nsdr = eval_result(voice_batch[i][:X_sing_istft.shape[-1]], X_sing_istft, mix_batch[i][:X_sing_istft.shape[-1]])
         sdr_voice, sir_voice, sar_voice, sdr, sir, sar = eval_result(voice_batch[i][:X_sing_istft.shape[-1]], X_sing_istft, mix_batch[i][:X_sing_istft.shape[-1]])
         #NSDR_dict[batch_file[i]] = (duration_batch[i], nsdr)
         # [1:] fix '/' in the string
         NSDR_dict[batch_file[i][1:]] = {}
-        NSDR_dict[batch_file[i][1:]]['duration']  = duration_batch[i]
+        NSDR_dict[batch_file[i][1:]]['duration'] = duration_batch[i]
         NSDR_dict[batch_file[i][1:]]['sdr_voice'] = sdr_voice
         NSDR_dict[batch_file[i][1:]]['sir_voice'] = sir_voice
         NSDR_dict[batch_file[i][1:]]['sar_voice'] = sar_voice
@@ -75,7 +74,7 @@ for j in range(total_batch):
     #GNSDR = batch_NSDR /sum(duration_batch)
     #print("GNSDR in the batch: {}".format(GNSDR))
     end = time.time()
-    average_time = (end - start)/sum(duration_batch)
+    average_time = (end - start) / sum(duration_batch)
     print("average time taken in per clip: {}".format(average_time))
 
 
@@ -83,9 +82,3 @@ for j in range(total_batch):
 #print("Overall GNSDR: {}".format(GNSDR_all))
 #pickle.dump(NSDR_dict, open('/scratch/lg2755/valid_res/NSDR_dict_4_gain3.p', 'wb'))
 pickle.dump(NSDR_dict, open('/scratch/lg2755/valid_res/NSDR_dict_gain25.p', 'wb'))
-
-
-
-
-
-
