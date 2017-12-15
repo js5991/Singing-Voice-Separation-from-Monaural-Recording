@@ -32,10 +32,11 @@ NSDR_file = '/scratch/js5991/opt/NSDR_dict_lstm.p'
 
 batch_size = 10
 model_saving_dir = 'saved_model/'
+#note = 'full_64000_32000t'
 note = 'full'
-num_epoch = 10
-training = True
-evaluation = False
+num_epoch = 20
+training = False
+evaluation = True
 
 
 class lstm(nn.Module):
@@ -84,7 +85,7 @@ def train(train_data, valid_data, batch_size, total_batch_train, total_batch_val
         epoch_loss = 0
         for j in range(total_batch_train):
             start = time.time()
-            data_iter = train_data.batch_iter(batch_size, need_padding=True, max_length=10000)
+            data_iter = train_data.batch_iter(batch_size, need_padding=True, max_length=64000)
             mix_batch, music_batch, voice_batch, duration_batch, batch_file = next(data_iter)
             if torch.cuda.is_available():
                 use_cuda = True
@@ -95,11 +96,11 @@ def train(train_data, valid_data, batch_size, total_batch_train, total_batch_val
             sys.stdout.flush()
 
             if use_cuda:
-                input = Variable(torch.from_numpy(np.asarray(mix_batch)).cuda(), requires_grad=False)
-                target = Variable(torch.from_numpy(np.asarray(voice_batch)).cuda(), requires_grad=False)
+                input = Variable(torch.from_numpy(np.asarray(mix_batch)[:, 31999:]).cuda(), requires_grad=False)
+                target = Variable(torch.from_numpy(np.asarray(voice_batch)[:, 31999:]).cuda(), requires_grad=False)
             else:
-                input = Variable(torch.from_numpy(np.asarray(mix_batch)), requires_grad=False)
-                target = Variable(torch.from_numpy(np.asarray(voice_batch)), requires_grad=False)
+                input = Variable(torch.from_numpy(np.asarray(mix_batch)[:, 31999:]), requires_grad=False)
+                target = Variable(torch.from_numpy(np.asarray(voice_batch)[:, 31999:]), requires_grad=False)
 
             optimizer.zero_grad()
             out = model(input)
@@ -142,7 +143,7 @@ def eval_valid_loss(model, valid_data, use_cuda, total_batch_valid, batch_size):
     model.eval()
     loss_total = 0
     for epoch in range(total_batch_valid):
-        data_iter = valid_data.batch_iter(batch_size, need_padding=True, max_length=50000)
+        data_iter = valid_data.batch_iter(batch_size, need_padding=True, max_length=64000)
         mix_batch, music_batch, voice_batch, duration_batch, batch_file = next(data_iter)
         if use_cuda:
             input = Variable(torch.from_numpy(np.asarray(mix_batch)).cuda(), requires_grad=False)
@@ -181,7 +182,7 @@ def eval_last(model, valid_data, total_batch_valid, batch_size):
         out = model(input)
 
         for i in range(batch_size):
-            print(out.data.cpu().numpy().shape)
+            print(torch.squeeze(out).data.cpu().numpy().shape)
             sys.stdout.flush()
 
             sdr_voice, sir_voice, sar_voice, sdr, sir, sar = eval_result(voice_batch[i], out.data.cpu().numpy()[i], mix_batch[i])
@@ -193,6 +194,7 @@ def eval_last(model, valid_data, total_batch_valid, batch_size):
             NSDR_dict[batch_file[i][1:]]['sdr'] = sdr
             NSDR_dict[batch_file[i][1:]]['sir'] = sir
             NSDR_dict[batch_file[i][1:]]['sar'] = sar
+        pickle.dump(NSDR_dict, open(NSDR_file, 'wb'))
         '''    
         if batch == 1:
             break
