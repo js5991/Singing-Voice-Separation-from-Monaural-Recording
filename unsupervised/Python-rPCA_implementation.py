@@ -39,6 +39,8 @@ gain = 2.5
 NSDR_dict = dict()
 sum_NSDR = 0
 sum_duration = 0
+use_time_freq = True
+use_new_time_freq = False
 
 
 for j in range(total_batch):
@@ -51,9 +53,15 @@ for j in range(total_batch):
     #batch_NSDR = 0
     for i in range(batch_size):
         M_stft, L_output, S_output = separate_signal_with_RPCA(mix_batch[i], gamma_spec=gamma_spec)
-        #X_sing, X_music = time_freq_masking(M_stft, L_output, S_output, gain)
-        X_sing_istft = librosa.istft(S_output, hop_length=256)
-        X_music_istft = librosa.istft(L_output, hop_length=256)
+        X_sing, X_music = S_output, L_output
+        if use_time_freq:
+            print("using time frequency mask")
+            X_sing, X_music = time_freq_masking(M_stft, L_output, S_output, gain)
+        if use_new_time_freq:
+            print("using new time frequency mask")
+            X_sing, X_music = time_freq_masking_proposed(M_stft, L_output, S_output, gain)
+        X_sing_istft = librosa.istft(X_sing, hop_length=256)
+        X_music_istft = librosa.istft(X_music, hop_length=256)
         #nsdr = eval_result(voice_batch[i][:X_sing_istft.shape[-1]], X_sing_istft, mix_batch[i][:X_sing_istft.shape[-1]])
         sdr_voice, sir_voice, sar_voice, sdr, sir, sar = eval_result(voice_batch[i][:X_sing_istft.shape[-1]], X_sing_istft, mix_batch[i][:X_sing_istft.shape[-1]])
         #NSDR_dict[batch_file[i]] = (duration_batch[i], nsdr)

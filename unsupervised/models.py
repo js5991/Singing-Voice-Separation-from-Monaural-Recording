@@ -9,7 +9,7 @@ from scipy.sparse.linalg import svds
 def pcp_alm(X, maxiter=500, tol=1e-7, gamma_spec=True):
     """
     rpca algorithm
-    
+
     Principal Component Pursuit
     Finds the Principal Component Pursuit solution.
     Solves the optimization problem::
@@ -194,3 +194,9 @@ def time_freq_masking(M_stft, L_hat, S_hat, gain):
     return X_sing, X_music
 
 
+def time_freq_masking_proposed(M_stft, L_hat, S_hat, gain):
+    mask = np.abs(S_hat) - gain * np.abs(L_hat)
+    mask = (mask > 0) * 1
+    X_sing = np.multiply(mask, M_stft - L_hat)
+    X_music = M_stft - X_sing
+    return X_sing, X_music
