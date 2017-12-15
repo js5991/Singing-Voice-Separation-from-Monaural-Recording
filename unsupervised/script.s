@@ -5,11 +5,11 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=2
 #SBATCH --time=15:00:00
-#SBATCH --mem=8GB
-#SBATCH --job-name=opt_rpca
+#SBATCH --mem=25GB
+#SBATCH --job-name=opt_rpca_new
 #SBATCH --mail-type=END
-##SBATCH --mail-user=lg2755@nyu.edu
-#SBATCH --output=slurm_%j.out
+##SBATCH --mail-user=js5991@nyu.edu
+#SBATCH --output=new_gain_30_slurm_%j.out
 
 module purge
 module load python/intel/2.7.12
