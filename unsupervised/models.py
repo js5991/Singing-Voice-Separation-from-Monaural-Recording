@@ -6,7 +6,7 @@ from numpy.linalg import norm
 from scipy.sparse.linalg import svds
 
 
-def pcp_alm(X, maxiter=500, tol=1e-7):
+def pcp_alm(X, maxiter=500, tol=1e-7, gamma_spec=True):
     """
     rpca algorithm
     
@@ -24,6 +24,8 @@ def pcp_alm(X, maxiter=500, tol=1e-7):
     maxiter : int, 500 by default
         Maximum number of iterations to perform.
     tol : float, 1e-7 by default - in the paper
+
+    gamma_spec : True or a float. If gamma_spec = True, then algorithm gamma = 1/sqr(max_dimension), else specify a gamma parameter in float.
 
     Returns
     -------
@@ -117,9 +119,10 @@ def pcp_alm(X, maxiter=500, tol=1e-7):
 
     mu_inv = 4 * one_norm / np.prod(n)
 
-    gamma = 1 / np.sqrt(np.max([X.shape[0], X.shape[1]]))
-    #print("gamma", gamma)
-    # Kicking
+    if gamma_spec:
+        gamma = 1 / np.sqrt(np.max([n[0], n[1]]))
+    else:
+        gamma = gamma_spec
     k = np.min([
         np.floor(mu_inv / two_norm),
         np.floor(gamma * mu_inv / inf_norm)
@@ -164,13 +167,13 @@ def pcp_alm(X, maxiter=500, tol=1e-7):
     return L, S, (u, sig, v), i + 1
 
 
-def separate_signal_with_RPCA(M, improve=False):
+def separate_signal_with_RPCA(M, improve=False, gamma_spec=True):
     # Short-Time Fourier Transformation
     M_stft = librosa.stft(M, n_fft=1024, hop_length=256)
     # Get magnitude and phase
     M_mag, M_phase = librosa.magphase(M_stft)
     # RPCA
-    L_hat, S_hat, r_hat, n_iter_hat = pcp_alm(M_mag)
+    L_hat, S_hat, r_hat, n_iter_hat = pcp_alm(M_mag, gamma_spec=gamma_spec)
     # Append phase back to result
     L_output = np.multiply(L_hat, M_phase)
     S_output = np.multiply(S_hat, M_phase)
@@ -189,4 +192,5 @@ def time_freq_masking(M_stft, L_hat, S_hat, gain):
     X_sing = np.multiply(mask, M_stft)
     X_music = np.multiply(1 - mask, M_stft)
     return X_sing, X_music
+
 

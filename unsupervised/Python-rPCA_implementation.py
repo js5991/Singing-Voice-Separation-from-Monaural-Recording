@@ -35,7 +35,7 @@ batch_size = 10
 total_batch = len(data.wavfiles)/batch_size
 
 # TODO: multiple gain
-gain =3.0
+gain =2.5
 
 NSDR_dict = dict()
 sum_NSDR = 0
@@ -47,9 +47,11 @@ for j in range(total_batch):
     mix_batch, music_batch, voice_batch, duration_batch, batch_file = next(data_iter)
 
     start = time.time()
+    #gamma_spec = 0.01, 0.05, 0.1, 0.5
+    gamma_spec = 0.01
     #batch_NSDR = 0
     for i in range(batch_size):
-        M_stft, L_output, S_output = separate_signal_with_RPCA(mix_batch[i])
+        M_stft, L_output, S_output = separate_signal_with_RPCA(mix_batch[i], gamma_spec=gamma_spec)
         X_sing, X_music = time_freq_masking(M_stft, L_output, S_output, gain)
         X_sing_istft = librosa.istft(X_sing, hop_length=256)
         X_music_istft = librosa.istft(X_music, hop_length=256)
@@ -80,7 +82,7 @@ for j in range(total_batch):
 #GNSDR_all = sum_NSDR /sum_duration
 #print("Overall GNSDR: {}".format(GNSDR_all))
 #pickle.dump(NSDR_dict, open('/scratch/lg2755/valid_res/NSDR_dict_4_gain3.p', 'wb'))
-pickle.dump(NSDR_dict, open('/scratch/lg2755/valid_res/NSDR_dict_gain30.p', 'wb'))
+pickle.dump(NSDR_dict, open('/scratch/lg2755/valid_res/NSDR_dict_gain25.p', 'wb'))
 
 
 
